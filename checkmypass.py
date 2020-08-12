@@ -28,13 +28,22 @@ def pwned_api_check(password):
 
 
 def main(args):
-    for password in args:
-        count = pwned_api_check(password)
-        if count:
-            print(f'{password} was found {count} times, u should change')
-        else:
-            print(f'{password} was Not found')
+    if (file_name := args[1].endswith('.txt')):
+        read_passwords(file_name)
+    else:
+        for password in args:
+            count = pwned_api_check(password)
+            if count:
+                print(f'{password} was found {count} times, u should change')
+            else:
+                print(f'{password} was Not found')
     return 'done!'
+
+def read_passwords(name):
+    with open(name, 'r') as file:
+        lines = file.readlines()
+    return lines
+
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))
