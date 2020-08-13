@@ -19,6 +19,7 @@ def get_password_leaks_count(hashes, hash_to_check):
             return count
     return 0
 
+
 def pwned_api_check(password):
     #check if password exitsts in API response
     sha1pass = hashlib.sha1(password.encode('utf-8')).hexdigest().upper()
@@ -27,21 +28,29 @@ def pwned_api_check(password):
     return get_password_leaks_count(res,tail)
 
 
+def check_given_pass(passwords):
+    for password in passwords:
+        count = pwned_api_check(password)
+        if count:
+            print(f'{password} was found {count} times, u should change')
+        else:
+            print(f'{password} was Not found')
+
+
 def main(args):
-    if (file_name := args[1].endswith('.txt')):
-        read_passwords(file_name)
+    if args[0].endswith('.txt'):
+        passwords = read_passwords(args[0])
+        print(passwords)
+        check_given_pass(passwords)
     else:
-        for password in args:
-            count = pwned_api_check(password)
-            if count:
-                print(f'{password} was found {count} times, u should change')
-            else:
-                print(f'{password} was Not found')
+        check_given_pass(args)
     return 'done!'
+
 
 def read_passwords(name):
     with open(name, 'r') as file:
         lines = file.readlines()
+        lines = [l.rstrip() for l in lines]
     return lines
 
 
