@@ -10,6 +10,7 @@ def check():
     else:
         return f'{password} was Not found'
 
+
 def phrase_display():
     res = check()
 
